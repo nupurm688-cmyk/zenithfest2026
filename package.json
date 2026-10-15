@@ -1,0 +1,26 @@
+{
+  "name": "zenith26-fest-system",
+  "version": "1.0.0",
+  "description": "A production-grade, vibe-coded full-stack web application for managing the annual **Zenith '26 College Fest**. Built as a capstone project for **PM2-01 (How Software Works)** and **PM2-02 (Front-End, Back-End & Mobile)**.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nupurm688-cmyk/zenithfest2026.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/nupurm688-cmyk/zenithfest2026/issues"
+  },
+  "homepage": "https://github.com/nupurm688-cmyk/zenithfest2026#readme",
+  "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/cli": "^8.5.3",
+    "@capacitor/core": "^8.5.3"
+  }
+}

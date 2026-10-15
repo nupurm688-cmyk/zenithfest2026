@@ -1,7 +1,18 @@
-// Zenith '26 — Admin Dashboard JavaScript (admin.js)
-
 let cachedEvents = [];
 let activeTab = 'events'; // 'events' or 'registrations'
+
+// Resolve API base URL (supports web, local server, and native mobile APK)
+function getApiBaseUrl() {
+  const isMobileApp = window.location.protocol === 'capacitor:' || 
+                      window.location.protocol === 'ionic:' || 
+                      window.location.protocol === 'file:' || 
+                      (window.location.hostname === 'localhost' && window.Capacitor !== undefined);
+  if (isMobileApp) {
+    const custom = localStorage.getItem('zenith_api_endpoint');
+    return (custom ? custom : 'https://zenithfest2026.vercel.app').replace(/\/$/, '');
+  }
+  return '';
+}
 
 // Initialize dashboard
 document.addEventListener('DOMContentLoaded', () => {
@@ -76,8 +87,8 @@ async function loadDashboardData() {
   try {
     // Parallel fetch: Stats and Events
     const [statsRes, eventsRes] = await Promise.all([
-      fetch('/api/stats'),
-      fetch('/api/events'),
+      fetch(`${getApiBaseUrl()}/api/stats`),
+      fetch(`${getApiBaseUrl()}/api/events`),
     ]);
 
     if (!statsRes.ok || !eventsRes.ok) {
@@ -276,7 +287,7 @@ async function loadRegistrations(eventIdFilter = '') {
   `;
 
   try {
-    let url = '/api/registrations';
+    let url = `${getApiBaseUrl()}/api/registrations`;
     if (eventIdFilter) {
       url += `?event_id=${eventIdFilter}`;
     }
@@ -395,7 +406,7 @@ async function handleAddEventSubmit(e) {
   const venue = document.getElementById('new-event-venue').value.trim();
 
   try {
-    const res = await fetch('/api/events', {
+    const res = await fetch(`${getApiBaseUrl()}/api/events`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -439,7 +450,7 @@ async function confirmDeleteRegistration() {
   const modal = document.getElementById('delete-reg-modal');
 
   try {
-    const res = await fetch(`/api/registrations/${regId}`, {
+    const res = await fetch(`${getApiBaseUrl()}/api/registrations/${regId}`, {
       method: 'DELETE',
     });
 

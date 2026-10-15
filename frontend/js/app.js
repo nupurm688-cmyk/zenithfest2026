@@ -4,6 +4,19 @@ let currentCategory = 'All';
 let currentSearch = '';
 let searchDebounceTimer = null;
 
+// Resolve API base URL (supports web, local server, and native mobile APK)
+function getApiBaseUrl() {
+  const isMobileApp = window.location.protocol === 'capacitor:' || 
+                      window.location.protocol === 'ionic:' || 
+                      window.location.protocol === 'file:' || 
+                      (window.location.hostname === 'localhost' && window.Capacitor !== undefined);
+  if (isMobileApp) {
+    const custom = localStorage.getItem('zenith_api_endpoint');
+    return (custom ? custom : 'https://zenithfest2026.vercel.app').replace(/\/$/, '');
+  }
+  return '';
+}
+
 // Category badge color helper (Diwali Festive Palette)
 function getCategoryBadgeClass(category) {
   switch (category?.toLowerCase()) {
@@ -45,7 +58,7 @@ async function fetchEvents() {
       params.append('search', currentSearch.trim());
     }
 
-    const url = `/api/events${params.toString() ? '?' + params.toString() : ''}`;
+    const url = `${getApiBaseUrl()}/api/events${params.toString() ? '?' + params.toString() : ''}`;
     const response = await fetch(url);
 
     if (!response.ok) {
@@ -214,7 +227,7 @@ async function openEventModal(eventId) {
   modal.classList.remove('hidden');
 
   try {
-    const res = await fetch(`/api/events/${eventId}`);
+    const res = await fetch(`${getApiBaseUrl()}/api/events/${eventId}`);
     if (!res.ok) {
       throw new Error(`Event not found (HTTP ${res.status})`);
     }
@@ -323,7 +336,7 @@ async function handleRegistrationSubmit(e) {
   btnSpinner.classList.remove('hidden');
 
   try {
-    const response = await fetch(`/api/events/${eventId}/register`, {
+    const response = await fetch(`${getApiBaseUrl()}/api/events/${eventId}/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

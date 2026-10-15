@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Zenith 26</string>
+    <string name="title_activity_main">Zenith 26</string>
+    <string name="package_name">com.zenith26.fest</string>
+    <string name="custom_url_scheme">com.zenith26.fest</string>
+</resources>

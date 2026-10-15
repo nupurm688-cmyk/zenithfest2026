@@ -1,0 +1,77 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-apk:
+    name: Build Zenith '26 Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Sync Capacitor Web Assets to Android
+        run: npx cap sync android
+
+      - name: Make Gradlew Executable
+        run: chmod +x android/gradlew
+
+      - name: Build Android Debug APK
+        run: |
+          cd android
+          ./gradlew assembleDebug --stacktrace
+
+      - name: Stage APK Output
+        run: |
+          mkdir -p release-output
+          cp android/app/build/outputs/apk/debug/app-debug.apk release-output/Zenith26-Diwali-Edition.apk
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Zenith26-Diwali-Edition-APK
+          path: release-output/Zenith26-Diwali-Edition.apk
+          retention-days: 30
+
+      - name: Create or Update GitHub Release with APK
+        uses: softprops/action-gh-release@v2
+        if: github.ref == 'refs/heads/main'
+        with:
+          tag_name: mobile-v1.0.0
+          name: "🪔 Zenith '26 Mobile App (Diwali Edition) v1.0.0"
+          files: release-output/Zenith26-Diwali-Edition.apk
+          body: |
+            ### 📱 Zenith '26 College Fest — Android APK (Diwali Edition)
+
+            Download and install `Zenith26-Diwali-Edition.apk` on your Android device!
+
+            #### Highlights:
+            - **Diwali Festival Theme & Sparkler Particles**: Interactive fireworks and floating lanterns.
+            - **Event Explorer**: Browse all 14 college fest competitions with live seats.
+            - **Instant Registration**: Register for events with real-time validation.
+            - **Admin Console**: Track utilization rates and attendee counts.
+
+            > **Installation Tip:** If your phone shows "Blocked by Play Protect" or "Install from Unknown Sources", tap **More Details → Install Anyway** (standard for non-Play Store development APKs).
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,9 @@
+{
+  "appId": "com.zenith26.fest",
+  "appName": "Zenith 26",
+  "webDir": "public",
+  "server": {
+    "cleartext": true,
+    "androidScheme": "https"
+  }
+}
