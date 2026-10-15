@@ -18,8 +18,8 @@ function setupTabs() {
 
   tabEventsBtn.addEventListener('click', () => {
     activeTab = 'events';
-    tabEventsBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 text-white shadow-md shadow-indigo-600/30 transition';
-    tabRegsBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700 transition';
+    tabEventsBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-lg shadow-amber-500/25 transition';
+    tabRegsBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#1e0a36] text-amber-200 hover:bg-[#2b104c] hover:text-white border border-amber-700/50 transition';
 
     tabEventsContent.classList.remove('hidden');
     tabRegsContent.classList.add('hidden');
@@ -27,8 +27,8 @@ function setupTabs() {
 
   tabRegsBtn.addEventListener('click', () => {
     activeTab = 'registrations';
-    tabRegsBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 text-white shadow-md shadow-indigo-600/30 transition';
-    tabEventsBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700 transition';
+    tabRegsBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-lg shadow-amber-500/25 transition';
+    tabEventsBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#1e0a36] text-amber-200 hover:bg-[#2b104c] hover:text-white border border-amber-700/50 transition';
 
     tabRegsContent.classList.remove('hidden');
     tabEventsContent.classList.add('hidden');
@@ -120,7 +120,7 @@ function renderStats(stats) {
   if (stats.overall_utilization_pct >= 90) {
     bar.className = 'bg-rose-500 h-full rounded-full transition-all duration-500';
   } else {
-    bar.className = 'bg-indigo-500 h-full rounded-full transition-all duration-500';
+    bar.className = 'bg-gradient-to-r from-amber-500 to-yellow-400 h-full rounded-full transition-all duration-500';
   }
 }
 
@@ -139,21 +139,21 @@ function renderCategoryBreakdown(categoryMap) {
 
   const categories = Object.keys(categoryMap || {});
   if (categories.length === 0) {
-    container.innerHTML = '<div class="text-xs text-slate-500 col-span-full">No category records.</div>';
+    container.innerHTML = '<div class="text-xs text-amber-400/60 col-span-full">No category records.</div>';
     return;
   }
 
   categories.forEach(cat => {
     const count = categoryMap[cat];
-    const icon = categoryIcons[cat] || '📌';
+    const icon = categoryIcons[cat] || '🪔';
     const card = document.createElement('div');
-    card.className = 'bg-slate-800/80 border border-slate-700/80 rounded-xl p-3 flex items-center justify-between';
+    card.className = 'bg-[#1e0a36]/90 border border-amber-800/50 rounded-xl p-3 flex items-center justify-between shadow-inner';
     card.innerHTML = `
       <div class="flex items-center gap-2">
         <span class="text-lg">${icon}</span>
-        <span class="text-xs font-semibold text-slate-300">${cat}</span>
+        <span class="text-xs font-bold text-amber-200">${cat}</span>
       </div>
-      <span class="text-sm font-bold text-white bg-slate-900/60 px-2 py-0.5 rounded-lg border border-slate-700/60">
+      <span class="text-xs font-black text-amber-300 bg-[#120521] px-2.5 py-0.5 rounded-lg border border-amber-700/60 shadow-sm">
         ${count}
       </span>
     `;

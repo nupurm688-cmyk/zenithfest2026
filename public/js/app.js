@@ -4,21 +4,21 @@ let currentCategory = 'All';
 let currentSearch = '';
 let searchDebounceTimer = null;
 
-// Category badge color helper
+// Category badge color helper (Diwali Festive Palette)
 function getCategoryBadgeClass(category) {
   switch (category?.toLowerCase()) {
     case 'technical':
-      return 'bg-cyan-950/80 text-cyan-300 border-cyan-800/60';
+      return 'bg-amber-950/80 text-amber-300 border-amber-600/60';
     case 'cultural':
-      return 'bg-fuchsia-950/80 text-fuchsia-300 border-fuchsia-800/60';
+      return 'bg-rose-950/80 text-rose-300 border-rose-600/60';
     case 'sports':
-      return 'bg-emerald-950/80 text-emerald-300 border-emerald-800/60';
+      return 'bg-emerald-950/80 text-emerald-300 border-emerald-600/60';
     case 'gaming':
-      return 'bg-amber-950/80 text-amber-300 border-amber-800/60';
+      return 'bg-purple-950/80 text-purple-300 border-purple-600/60';
     case 'workshop':
-      return 'bg-violet-950/80 text-violet-300 border-violet-800/60';
+      return 'bg-orange-950/80 text-orange-300 border-orange-600/60';
     default:
-      return 'bg-slate-800 text-slate-300 border-slate-700';
+      return 'bg-[#240e3b] text-amber-200 border-amber-700/60';
   }
 }
 
@@ -112,20 +112,20 @@ function renderEventCards(events) {
     }
 
     const card = document.createElement('div');
-    card.className = `group bg-slate-800/70 hover:bg-slate-800/90 border ${
-      isFull ? 'border-rose-900/40' : 'border-slate-700/60 hover:border-indigo-500/50'
-    } rounded-2xl p-6 flex flex-col justify-between shadow-lg hover:shadow-indigo-500/10 transition-all duration-200 hover:-translate-y-1 animate-fade-in`;
+    card.className = `group bg-[#180829]/85 hover:bg-[#220c38]/95 border ${
+      isFull ? 'border-rose-900/50' : 'border-amber-800/40 hover:border-amber-400/80'
+    } rounded-2xl p-6 flex flex-col justify-between shadow-xl hover:shadow-amber-500/15 transition-all duration-300 hover:-translate-y-1.5 animate-fade-in backdrop-blur-sm`;
     card.style.animationDelay = `${index * 40}ms`;
 
     card.innerHTML = `
       <div>
         <!-- Top bar: Icon, Category & Fee -->
         <div class="flex items-start justify-between gap-3 mb-4">
-          <div class="w-12 h-12 rounded-xl bg-slate-700/60 border border-slate-600/60 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
-            ${event.icon || '⚡'}
+          <div class="w-12 h-12 rounded-xl bg-[#130521] border border-amber-600/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-110 transition-transform">
+            ${event.icon || '🪔'}
           </div>
           <div class="flex flex-wrap items-center justify-end gap-1.5">
-            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full border ${badgeClass}">
+            <span class="text-xs font-bold px-2.5 py-0.5 rounded-full border ${badgeClass}">
               ${event.category}
             </span>
             <span class="text-xs font-bold px-2 py-0.5 rounded-full border ${feeClass}">
@@ -135,17 +135,17 @@ function renderEventCards(events) {
         </div>
 
         <!-- Event Title -->
-        <h3 class="text-lg font-bold text-white tracking-tight mb-2 group-hover:text-indigo-300 transition-colors">
+        <h3 class="text-lg font-bold text-white tracking-tight mb-2 group-hover:text-amber-300 transition-colors">
           ${escapeHtml(event.title)}
         </h3>
 
         <!-- Description Snippet -->
-        <p class="text-xs text-slate-300 leading-relaxed line-clamp-2 mb-4">
+        <p class="text-xs text-amber-100/80 leading-relaxed line-clamp-2 mb-4">
           ${escapeHtml(event.description || 'No description provided.')}
         </p>
 
         <!-- Metadata -->
-        <div class="space-y-1.5 text-xs text-slate-400 mb-5 pt-3 border-t border-slate-700/60">
+        <div class="space-y-1.5 text-xs text-amber-300/80 mb-5 pt-3 border-t border-amber-900/50">
           <div class="flex items-center gap-2">
             <span>📅</span>
             <span>${event.event_date} · ${event.event_time}</span>
@@ -162,10 +162,10 @@ function renderEventCards(events) {
         <div class="mb-3">
           <div class="flex items-center justify-between mb-1.5">
             ${seatBadgeHtml}
-            <span class="text-[11px] font-medium text-slate-400">${fillPercent}% full</span>
+            <span class="text-[11px] font-medium text-amber-300/70">${fillPercent}% full</span>
           </div>
-          <div class="w-full bg-slate-700/80 h-1.5 rounded-full overflow-hidden">
-            <div class="${isFull ? 'bg-rose-500' : 'bg-indigo-500'} h-full rounded-full transition-all duration-300" style="width: ${fillPercent}%;"></div>
+          <div class="w-full bg-[#120521] h-1.5 rounded-full overflow-hidden border border-amber-900/60">
+            <div class="${isFull ? 'bg-rose-500' : 'bg-gradient-to-r from-amber-500 to-yellow-400'} h-full rounded-full transition-all duration-300" style="width: ${fillPercent}%;"></div>
           </div>
         </div>
 
@@ -173,11 +173,11 @@ function renderEventCards(events) {
           data-event-id="${event.id}" 
           class="view-details-btn w-full py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-1.5 ${
             isFull
-              ? 'bg-slate-700/70 hover:bg-slate-700 text-slate-300 border border-slate-600'
-              : 'bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white shadow-md shadow-indigo-600/30'
+              ? 'bg-[#220d3b] text-amber-400/60 border border-amber-900/50 cursor-pointer'
+              : 'bg-gradient-to-r from-amber-400 via-orange-500 to-yellow-400 hover:from-amber-300 hover:via-orange-400 hover:to-yellow-300 active:scale-95 text-slate-950 font-black shadow-lg shadow-amber-500/25'
           }"
         >
-          <span>${isFull ? 'View Details (Full)' : 'View Details & Register'}</span>
+          <span>${isFull ? 'View Details (Full)' : 'View Details & Register ✨'}</span>
           <span>→</span>
         </button>
       </div>
@@ -429,15 +429,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Category filter pill clicks
   const categoryButtons = document.querySelectorAll('.filter-btn');
+  const activeClassList = ['active-filter', 'bg-gradient-to-r', 'from-amber-500', 'to-orange-500', 'text-slate-950', 'font-bold', 'shadow-lg', 'shadow-amber-500/25'];
+  const inactiveClassList = ['bg-[#1d0b33]', 'text-amber-200', 'hover:bg-[#2b104c]', 'hover:text-amber-100', 'border', 'border-amber-800/60', 'font-semibold'];
+
   categoryButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       categoryButtons.forEach(b => {
-        b.classList.remove('active-filter', 'bg-indigo-600', 'text-white', 'shadow-md', 'shadow-indigo-600/30');
-        b.classList.add('bg-slate-800', 'text-slate-300', 'hover:bg-slate-700', 'hover:text-white', 'border', 'border-slate-700/60');
+        b.classList.remove(...activeClassList);
+        b.classList.add(...inactiveClassList);
       });
 
-      btn.classList.add('active-filter', 'bg-indigo-600', 'text-white', 'shadow-md', 'shadow-indigo-600/30');
-      btn.classList.remove('bg-slate-800', 'text-slate-300', 'hover:bg-slate-700', 'border');
+      btn.classList.add(...activeClassList);
+      btn.classList.remove(...inactiveClassList);
 
       currentCategory = btn.getAttribute('data-category');
       fetchEvents();
@@ -454,11 +457,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     categoryButtons.forEach(b => {
       if (b.getAttribute('data-category') === 'All') {
-        b.classList.add('active-filter', 'bg-indigo-600', 'text-white', 'shadow-md', 'shadow-indigo-600/30');
-        b.classList.remove('bg-slate-800', 'text-slate-300');
+        b.classList.add(...activeClassList);
+        b.classList.remove(...inactiveClassList);
       } else {
-        b.classList.remove('active-filter', 'bg-indigo-600', 'text-white', 'shadow-md');
-        b.classList.add('bg-slate-800', 'text-slate-300');
+        b.classList.remove(...activeClassList);
+        b.classList.add(...inactiveClassList);
       }
     });
 
