@@ -1,0 +1,285 @@
+{
+  "info": {
+    "_postman_id": "c1f7b9e0-8a21-4d1e-bf23-zenith26api01",
+    "name": "Zenith '26 College Fest API Collection",
+    "description": "Comprehensive Postman test collection for the Zenith '26 College Fest Management System API endpoints, server-side validations, and error contracts.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. GET /api/events (Search & Filter)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/events?category=Technical&search=Sprint",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "events"],
+          "query": [
+            {
+              "key": "category",
+              "value": "Technical",
+              "description": "Filter by category: Technical, Cultural, Sports, Gaming, Workshop, or All"
+            },
+            {
+              "key": "search",
+              "value": "Sprint",
+              "description": "Case-insensitive substring search matching event title"
+            }
+          ]
+        },
+        "description": "Retrieves the list of events matching query filters with live calculated available_seats."
+      },
+      "response": []
+    },
+    {
+      "name": "2. GET /api/events/{event_id} (Single Event Detail)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/events/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "events", "1"]
+        },
+        "description": "Fetches detail for event ID 1 (Code Sprint 2.0). Returns 404 if event does not exist."
+      },
+      "response": []
+    },
+    {
+      "name": "3. POST /api/events/{event_id}/register - [Success Case 201]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"student_name\": \"Aarav Patel\",\n  \"roll_number\": \"26CS042\",\n  \"email\": \"aarav.patel@zenith.edu\",\n  \"phone\": \"+91 9876543210\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/events/1/register",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "events", "1", "register"]
+        },
+        "description": "Valid student registration for event ID 1. Server validates capacity and uniqueness, then inserts record and returns HTTP 201."
+      },
+      "response": []
+    },
+    {
+      "name": "4. POST /api/events/{event_id}/register - [Missing Field 400]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"student_name\": \"\",\n  \"roll_number\": \"26CS042\",\n  \"email\": \"aarav.patel@zenith.edu\",\n  \"phone\": \"\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/events/1/register",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "events", "1", "register"]
+        },
+        "description": "Deliberately sends empty student_name. Server-side validation catches this and returns HTTP 400 Bad Request."
+      },
+      "response": []
+    },
+    {
+      "name": "5. POST /api/events/{event_id}/register - [Invalid Email 400]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"student_name\": \"Kavita Rao\",\n  \"roll_number\": \"26EC018\",\n  \"email\": \"kavitaraonotvalid\",\n  \"phone\": \"9876500000\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/events/1/register",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "events", "1", "register"]
+        },
+        "description": "Email missing '@' sign. Server validation rejects with HTTP 400 Bad Request."
+      },
+      "response": []
+    },
+    {
+      "name": "6. POST /api/events/{event_id}/register - [Duplicate Conflict 409]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"student_name\": \"Aarav Patel\",\n  \"roll_number\": \"26CS042\",\n  \"email\": \"aarav.patel@zenith.edu\",\n  \"phone\": \"+91 9876543210\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/events/1/register",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "events", "1", "register"]
+        },
+        "description": "Registering the same student email for the same event a second time. Returns HTTP 409 Conflict."
+      },
+      "response": []
+    },
+    {
+      "name": "7. GET /api/registrations (All Registrations)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/registrations",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "registrations"]
+        },
+        "description": "Retrieves all student registrations across all fest events with joined event titles."
+      },
+      "response": []
+    },
+    {
+      "name": "8. GET /api/registrations (Filter by event_id)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/registrations?event_id=1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "registrations"],
+          "query": [
+            {
+              "key": "event_id",
+              "value": "1",
+              "description": "Filter registrations to event ID 1 only"
+            }
+          ]
+        },
+        "description": "Filters registrations to a specific event ID for targeted check-ins."
+      },
+      "response": []
+    },
+    {
+      "name": "9. GET /api/stats (Live Dashboard Metrics)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/stats",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "stats"]
+        },
+        "description": "Returns live computed statistics: total_events, total_registrations, total_capacity, overall_utilization_pct, upcoming_events_count, events_by_category."
+      },
+      "response": []
+    },
+    {
+      "name": "10. POST /api/events - [Stretch: Admin Add Event]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Drone Obstacle Arena\",\n  \"category\": \"Technical\",\n  \"description\": \"Precision drone obstacle navigation and time-trial race across campus stadium.\",\n  \"event_date\": \"2026-11-15\",\n  \"event_time\": \"03:30 PM\",\n  \"venue\": \"Open Ground B\",\n  \"capacity\": 35,\n  \"fee\": 50,\n  \"icon\": \"🛸\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/events",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "events"]
+        },
+        "description": "Allows fest admin to add a new event with validation. Returns HTTP 201 Created."
+      },
+      "response": []
+    },
+    {
+      "name": "11. DELETE /api/registrations/{id} - [Stretch: Admin Cancel Registration]",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/registrations/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "registrations", "1"]
+        },
+        "description": "Cancels registration ID 1 and releases the seat immediately back to the pool."
+      },
+      "response": []
+    }
+  ]
+}
