@@ -1,14 +1,30 @@
+import os
+import shutil
 import sqlite3
 from pathlib import Path
 
 # Resolve path to fest.db at the project root
 BASE_DIR = Path(__file__).resolve().parent.parent
-DB_PATH = BASE_DIR / "fest.db"
+
+
+def get_db_path() -> Path:
+    """Returns writable database path (uses /tmp on serverless environments like Vercel)."""
+    if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+        tmp_db = Path("/tmp/fest.db")
+        if not tmp_db.exists():
+            root_db = BASE_DIR / "fest.db"
+            if root_db.exists():
+                try:
+                    shutil.copy2(root_db, tmp_db)
+                except Exception as e:
+                    print(f"Warning: Could not copy fest.db to /tmp: {e}")
+        return tmp_db
+    return BASE_DIR / "fest.db"
 
 
 def get_db_connection() -> sqlite3.Connection:
     """Returns a SQLite connection with row_factory set to sqlite3.Row for dict-like access."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(get_db_path())
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
     return conn

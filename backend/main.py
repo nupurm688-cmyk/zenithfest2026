@@ -26,7 +26,7 @@ from backend.models import (
 )
 from backend.seed_data import seed_events
 
-FRONTEND_DIR = BASE_DIR / "frontend"
+FRONTEND_DIR = BASE_DIR / "public" if (BASE_DIR / "public").exists() else BASE_DIR / "frontend"
 
 
 @asynccontextmanager
@@ -464,8 +464,16 @@ def serve_home():
     return FileResponse(index_file)
 
 
+@app.get("/index.html", response_class=FileResponse, include_in_schema=False)
+def serve_index():
+    """Serves the student event portal."""
+    index_file = FRONTEND_DIR / "index.html"
+    return FileResponse(index_file)
+
+
 @app.get("/admin.html", response_class=FileResponse, include_in_schema=False)
 def serve_admin():
     """Serves the admin dashboard."""
     admin_file = FRONTEND_DIR / "admin.html"
     return FileResponse(admin_file)
+
